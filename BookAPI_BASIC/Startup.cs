@@ -1,7 +1,10 @@
+using BookAPI_BASIC.Model;
+using BookAPI_BASIC.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +22,7 @@ namespace BookAPI_BASIC
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
         }
 
         public IConfiguration Configuration { get; }
@@ -32,6 +36,8 @@ namespace BookAPI_BASIC
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BookAPI_BASIC", Version = "v1" });
             });
+            services.AddDbContext<BookContext>(x => x.UseSqlite("Data source=Books.db"));
+            services.AddScoped<IBookRepository, BookRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
